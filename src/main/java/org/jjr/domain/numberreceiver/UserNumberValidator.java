@@ -5,15 +5,17 @@ import org.springframework.stereotype.Component;
 import java.util.Set;
 
 @Component
-public class UserNumberValidator {
-    void validateNumbers(Set<Integer> userNumbers){
-        long validCount = userNumbers.stream()
-                .filter(number -> number >= 1 && number <= 99)
-                .distinct()
-                .count();
+class UserNumberValidator {
+    private static final Integer MIN_NUMBER = 1 ;
+    private static final Integer MAX_NUMBER = 99;
+    private static final Integer AMOUNT_OF_NUMBERS = 6;
 
-        if (validCount != 6) {
-            throw new IllegalArgumentException("Musisz podać dokładnie 6 unikalnych liczb z zakresu 1–99!");
+    public void validateNumbers(Set<Integer> numberToValidate) {
+        if (numberToValidate.stream()
+                .filter(number -> number >= MIN_NUMBER)
+                .filter(number -> number <= MAX_NUMBER)
+                .count() != AMOUNT_OF_NUMBERS) {
+            throw new InvalidDataException("Incorrect number or range of numbers.");
         }
     }
 }

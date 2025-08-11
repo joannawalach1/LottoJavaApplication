@@ -1,29 +1,35 @@
 package org.jjr.domain.numberreceiver;
 
-import org.jjr.domain.numberreceiver.dto.TicketDto;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mapstruct.factory.Mappers;
 
-import javax.sound.midi.InvalidMidiDataException;
+import java.time.*;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class NumberReceiverFacadeTest {
-    NumberReceiverFacade numberReceiverFacade;
-
-    @BeforeEach
-    void setUp() {
-        numberReceiverFacade = new NumberReceiverFacade();
-    }
+    Clock clock = Clock.fixed(
+            LocalDateTime.of(2025, 5, 21, 12, 0, 0)
+                    .toInstant(ZoneOffset.UTC),
+            ZoneId.systemDefault()
+    );
+    NumberReceiverFacade numberReceiverFacade = new NumberReceiverFacade(
+            new InMemoryNumberReceiverRepository(),
+            new UserNumberValidator(),
+            Mappers.getMapper(TicketMapper.class),
+            clock,
+            new DrawDateGenerator(clock),
+            new HashGenerator()
+    );
 
     @Test
     void should_return_ticket_if_users_gave_six_numbers() {
         //given
         Set<Integer> userNumbers = Set.of(1, 2, 3, 4, 5, 6);
         //when
-        TicketDto result = numberReceiverFacade.getNumbersFromUser(userNumbers);
+        Ticket result = numberReceiverFacade.getNumbersFromUser(userNumbers);
         //then
         assertEquals(result.userNumbers().size(), userNumbers.size());
     }
@@ -36,7 +42,7 @@ class NumberReceiverFacadeTest {
         InvalidDataException invalidDataException = assertThrows(InvalidDataException.class, () ->
                 numberReceiverFacade.getNumbersFromUser(userNumbers)
         );
-        assertEquals("", invalidDataException.getMessage());
+        assertEquals("Incorrect number or range of numbers.", invalidDataException.getMessage());
     }
 
     @Test
@@ -47,7 +53,7 @@ class NumberReceiverFacadeTest {
         InvalidDataException invalidDataException = assertThrows(InvalidDataException.class, () ->
                 numberReceiverFacade.getNumbersFromUser(userNumbers)
         );
-        assertEquals("", invalidDataException.getMessage());
+        assertEquals("Incorrect number or range of numbers.", invalidDataException.getMessage());
     }
 
     @Test
@@ -58,6 +64,7 @@ class NumberReceiverFacadeTest {
         InvalidDataException invalidDataException = assertThrows(InvalidDataException.class, () ->
                 numberReceiverFacade.getNumbersFromUser(userNumbers)
         );
-        assertEquals("", invalidDataException.getMessage());
+        assertEquals("Incorrect number or range of numbers.", invalidDataException.getMessage());
     }
+
 }
