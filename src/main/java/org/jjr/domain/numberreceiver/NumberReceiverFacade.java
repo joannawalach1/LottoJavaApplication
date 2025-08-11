@@ -1,5 +1,6 @@
 package org.jjr.domain.numberreceiver;
 
+
 import org.jjr.domain.numberreceiver.dto.TicketDto;
 import java.time.Clock;
 
@@ -34,3 +35,4 @@ public class NumberReceiverFacade {
         return newTicket;
     }
 }
+
