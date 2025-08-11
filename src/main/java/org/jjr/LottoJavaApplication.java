@@ -7,6 +7,5 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class LottoJavaApplication {
     public static void main(String[] args) {
         SpringApplication.run(LottoJavaApplication.class, args);
-
     }
 }
