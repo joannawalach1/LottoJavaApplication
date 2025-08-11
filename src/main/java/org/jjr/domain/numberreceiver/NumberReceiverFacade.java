@@ -7,12 +7,13 @@ import java.util.Set;
 
 public class NumberReceiverFacade {
     private UserNumberValidator userNumberValidator;
+    private TicketMapper ticketMapper;
 
     public TicketDto getNumbersFromUser(Set<Integer> userNumbers) {
         userNumberValidator.validateNumbers(userNumbers);
         LocalDateTime ticketCreatedAt = LocalDateTime.now();
         Ticket newTicket = new Ticket(userNumbers, ticketCreatedAt);
-        TicketDto ticketDto = TicketMapper.toDto(newTicket);
+        TicketDto ticketDto = ticketMapper.toDto(newTicket);
         return ticketDto;
     }
 }

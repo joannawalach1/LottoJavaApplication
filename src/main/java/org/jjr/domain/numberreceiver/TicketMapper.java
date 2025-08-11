@@ -5,5 +5,5 @@ import org.mapstruct.Mapper;
 
 @Mapper
 public interface TicketMapper {
-    static TicketDto toDto(Ticket ticket);
+    TicketDto toDto(Ticket ticket);
 }
